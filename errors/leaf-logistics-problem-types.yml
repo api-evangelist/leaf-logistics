@@ -1,0 +1,51 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.leaflogistics.com/
+format: vendor-json
+note: >-
+  Leaf Logistics publishes no error reference and no OpenAPI, so nothing could be derived from a
+  spec. These entries are the error envelopes the API host actually returned to anonymous requests
+  during this pass, recorded verbatim. The catalog is therefore complete only for the unauthenticated
+  surface — the authenticated error space is not observable without credentials.
+envelopes:
+- name: hasura-http-error
+  shape: '{"error": string, "path": string, "code": string}'
+  content_type: application/json
+  applies_to: non-GraphQL HTTP routes on api.leaflogistics.com
+- name: graphql-errors
+  shape: '{"errors": [{"message": string, "extensions": {"path": string, "code": string}}]}'
+  content_type: application/json
+  applies_to: POST /v1/graphql
+  note: >-
+    Per the GraphQL spec, transport status is 200 even for an authentication failure — an agent must
+    read errors[].extensions.code, not the HTTP status.
+problems:
+- code: not-found
+  status: 404
+  title: Resource does not exist
+  envelope: hasura-http-error
+  body: '{"error":"resource does not exist","path":"$","code":"not-found"}'
+  observed_at: https://api.leaflogistics.com/openapi.json
+- code: invalid-headers
+  status: 400
+  title: Missing Authorization or Cookie header in JWT authentication mode
+  envelope: hasura-http-error
+  body: >-
+    {"error":"Missing 'Authorization' or 'Cookie' header in JWT authentication mode","path":"$",
+    "code":"invalid-headers"}
+  observed_at: https://api.leaflogistics.com/api/rest
+  remediation: Present a Bearer JWT in the Authorization header, or an authenticated session cookie.
+- code: invalid-headers
+  status: 200
+  title: Missing Authorization or Cookie header in JWT authentication mode
+  envelope: graphql-errors
+  body: >-
+    {"errors":[{"message":"Missing 'Authorization' or 'Cookie' header in JWT authentication mode",
+    "extensions":{"path":"$","code":"invalid-headers"}}]}
+  observed_at: https://api.leaflogistics.com/v1/graphql
+  remediation: Present a Bearer JWT in the Authorization header, or an authenticated session cookie.
+unobservable:
+  reason: >-
+    Authenticated 4xx/5xx codes (validation, permission, constraint violations) are not reachable
+    anonymously and Leaf publishes no error-code reference, so they are absent by measurement, not by
+    assumption.

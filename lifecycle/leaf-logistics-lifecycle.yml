@@ -1,0 +1,39 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.leaflogistics.com/v1/version + https://www.leaflogistics.com/
+note: >-
+  Leaf Logistics publishes no versioning policy, no deprecation policy, no SLA and no status page.
+  The only version signal available is the API engine's own build, which the host discloses
+  anonymously. No StatusPage or Deprecation pointer is emitted, because neither surface exists.
+versioning:
+  scheme: path-prefix
+  current: v1
+  detail: >-
+    Routes are namespaced /v1/graphql, /v1/version. This is Hasura GraphQL Engine's routing, not a
+    published Leaf API version. GraphQL schema evolution at Leaf is not publicly documented.
+  docs: null
+engine_version:
+  value: v2.35.1
+  server_type: ce
+  source: https://api.leaflogistics.com/v1/version
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  detail: No deprecation policy or RFC 8594 Sunset/Deprecation header support is published.
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  probes:
+  - url: https://status.leaflogistics.com/
+    status: 000
+    result: DNS does not resolve
+  - url: https://www.leaflogistics.com/status/
+    status: 403
+changelog:
+  url: null
+  detail: >-
+    No dated product or API changelog is published. The blog at
+    https://www.leaflogistics.com/blog/ carries company and industry posts, not release notes.
+deprecated_operations: []

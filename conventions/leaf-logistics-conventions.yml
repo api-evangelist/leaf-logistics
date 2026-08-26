@@ -1,0 +1,76 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.leaflogistics.com/ (live probes) + https://www.leaflogistics.com/ (docs search)
+note: >-
+  Leaf Logistics publishes no API reference, so almost every cross-cutting convention below is
+  recorded as `unknown` — meaning it was looked for and not found, not that it is absent. The few
+  entries marked observed came from the API host's own anonymous responses. Nothing is inferred from
+  the fact that the platform runs Hasura beyond what Hasura's public, documented behaviour makes
+  verifiable at these endpoints.
+api: Leaf Logistics Platform API
+interface_style: graphql
+auth:
+  style: bearer-jwt
+  header: Authorization
+  alternative: session cookie
+  detail: authentication/leaf-logistics-authentication.yml
+  observed: true
+transport:
+  graphql_endpoint: https://api.leaflogistics.com/v1/graphql
+  rest_endpoint_namespace: https://api.leaflogistics.com/api/rest
+  health_endpoint: https://api.leaflogistics.com/healthz
+  version_endpoint: https://api.leaflogistics.com/v1/version
+  observed: true
+idempotency:
+  supported: unknown
+  detail: >-
+    No idempotency key header is documented and none can be observed without credentials. GraphQL
+    mutations carry no transport-level idempotency contract by default.
+pagination:
+  style: unknown
+  detail: >-
+    Not observable. Hasura's generated schema conventionally exposes limit/offset (and
+    order_by/where) arguments, but Leaf's schema is introspection-gated so this was NOT confirmed and
+    is not asserted.
+field_selection:
+  style: graphql-selection-set
+  detail: >-
+    Inherent to GraphQL — a caller names the fields it wants. This is a property of the protocol, not
+    a documented Leaf convention.
+  observed: true
+request_id_tracing:
+  supported: unknown
+versioning:
+  scheme: path-prefix
+  detail: >-
+    Endpoints are namespaced /v1/* (v1/graphql, v1/version). This is the Hasura engine's own routing,
+    not a published Leaf API version policy. No version negotiation, no deprecation headers and no
+    changelog were found.
+error_envelope:
+  detail: errors/leaf-logistics-problem-types.yml
+  rfc9457: false
+  observed: true
+rate_limit_signaling:
+  headers_observed: []
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appeared on any anonymous response, and no
+    limits are documented. See rate-limits/leaf-logistics-rate-limits.yml.
+dry_run_mode:
+  supported: unknown
+  detail: No sandbox, test mode or dry-run parameter is published.
+reversibility:
+  grade: unknown
+  write_surface: unknown
+  detail: >-
+    NOT ASSESSABLE. The write surface is a GraphQL mutation root behind JWT authentication and the
+    schema is introspection-gated, so no reversal operation (cancel / void / restore) and no reversal
+    window could be identified. Leaf's own product language is about long-term freight contracts and
+    "guaranteed tender acceptance", which implies commitments with cancellation terms, but those
+    terms live in the customer agreement and are NOT stated in any public technical document — so no
+    window is recorded here. This is `unknown`, deliberately not `na`: the API demonstrably has a
+    write surface (the platform books freight), we simply cannot see it.
+  reversal_operations: []
+  evidence:
+  - url: https://api.leaflogistics.com/v1/graphql
+    status: 200
+    result: introspection refused — invalid-headers / JWT authentication mode

@@ -1,0 +1,74 @@
+generated: '2026-08-25'
+method: probed
+source: live GET of each /.well-known/ path on every Leaf Logistics host
+note: >-
+  No host serves a real /.well-known/ document. www.leaflogistics.com is a statically exported
+  WordPress site on S3/CloudFront and answers every unknown key with an S3 AccessDenied 403.
+  api.leaflogistics.com is a Hasura GraphQL Engine and answers every unknown path with its own JSON
+  404 envelope. app.leaflogistics.com is a single-page application whose catch-all returns HTTP 200
+  with the same 663-byte HTML shell for every path probed — that is an SPA catch-all, NOT a served
+  document, so it is recorded as a miss and NO WellKnown/SecurityTxt pointer is emitted.
+hit_count: 0
+hosts:
+- host: https://www.leaflogistics.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: https://api.leaflogistics.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://app.leaflogistics.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+  - path: /.well-known/openid-configuration
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+  - path: /.well-known/api-catalog
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+  - path: /.well-known/agent-card.json
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+  - path: /.well-known/agent.json
+    status: 200
+    note: SPA catch-all — 663-byte HTML shell, not a document. Treated as a miss.
+soft_404_control:
+  host: https://app.leaflogistics.com
+  path: /llms.txt
+  status: 200
+  bytes: 663
+  identical_to_root_shell: true

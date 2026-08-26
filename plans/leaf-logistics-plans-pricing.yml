@@ -1,0 +1,18 @@
+generated: '2026-08-25'
+method: searched
+source: https://www.leaflogistics.com/
+plan_count: 0
+note: >-
+  Leaf Logistics publishes no pricing page and no plans of any kind. There is no /pricing/ route on
+  the site (the S3 origin returns its AccessDenied 403 for missing keys), the primary nav offers only
+  "Get Started" and "Login", and the commercial model described on the shipper/carrier/broker pages
+  is a negotiated long-term freight contract — rates per lane and per circuit, agreed in onboarding —
+  rather than a published subscription or usage tier. There is no API plan, no free tier and no
+  self-service signup.
+probes:
+- url: https://www.leaflogistics.com/pricing/
+  status: 403
+- url: https://www.leaflogistics.com/get-started/
+  status: 200
+  result: contact form ("Get Started"), no prices
+plans: []

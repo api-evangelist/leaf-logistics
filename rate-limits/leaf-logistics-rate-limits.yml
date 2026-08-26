@@ -1,0 +1,27 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.leaflogistics.com/
+limit_count: 0
+note: >-
+  No rate limits are documented anywhere public — Leaf publishes no developer portal — and no
+  rate-limit signalling headers were returned on any anonymous response from api.leaflogistics.com.
+  Hasura GraphQL Engine community edition (v2.35.1, confirmed via /v1/version) has no built-in API
+  limits, so any throttling in front of this endpoint would be edge policy that is not advertised to
+  callers. An honest zero: an agent integrating with Leaf gets no runtime backoff signal.
+response_headers_observed: []
+headers_checked:
+- RateLimit-Limit
+- RateLimit-Remaining
+- RateLimit-Reset
+- X-RateLimit-Limit
+- X-RateLimit-Remaining
+- Retry-After
+exhaustion_status_code: unknown
+probes:
+- url: https://api.leaflogistics.com/v1/graphql
+  status: 200
+  result: no rate-limit headers present
+- url: https://api.leaflogistics.com/healthz
+  status: 200
+  result: no rate-limit headers present
+limits: []

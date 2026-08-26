@@ -1,0 +1,85 @@
+generated: '2026-08-25'
+method: probed
+source: live probes of api.leaflogistics.com + https://www.leaflogistics.com/
+note: >-
+  Assertions are limited to what an anonymous caller can verify. Leaf publishes no compliance page,
+  no trust center and no standards claims in its documentation, so most entries are recorded as
+  unknown rather than false.
+standards:
+- id: graphql
+  conforms: true
+  evidence: >-
+    POST https://api.leaflogistics.com/v1/graphql returns a spec-shaped GraphQL error document
+    ({"errors":[{"message":...,"extensions":{...}}]}); the host is Hasura GraphQL Engine v2.35.1 per
+    /v1/version.
+- id: jwt-rfc7519
+  conforms: true
+  evidence: >-
+    The endpoint self-identifies as running in "JWT authentication mode" and names the Authorization
+    header in its anonymous error body.
+- id: oauth2
+  conforms: unknown
+  evidence: >-
+    No /.well-known/oauth-authorization-server (404 on api host, 403 on www) and no published auth
+    docs; the JWT issuer could not be identified.
+- id: oidc
+  conforms: unknown
+  evidence: /.well-known/openid-configuration returned 404 (api) / 403 (www).
+- id: openapi
+  conforms: false
+  evidence: >-
+    /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs, /redoc,
+    /rapidoc, /swagger/v1/swagger.json and /q/openapi all returned the Hasura JSON 404 envelope on
+    api.leaflogistics.com; no spec is published on any Leaf host.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are a Hasura vendor envelope ({"error","path","code"}), not application/problem+json.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: No /.well-known/security.txt on any host (403 www, 404 api, SPA shell on app).
+- id: rfc8594-sunset-header
+  conforms: unknown
+  evidence: No deprecation policy published; no Sunset or Deprecation header observed.
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    /asyncapi.yaml and /asyncapi.json return the Hasura JSON 404 envelope; no event, streaming or
+    webhook surface is documented anywhere public.
+- id: soap-wsdl
+  conforms: false
+  evidence: >-
+    ?wsdl and ?singleWsdl on every host return an HTML shell (the Hasura console, the WordPress
+    export, or the app SPA), and /soap?wsdl returns the Hasura JSON 404. No SOAP contract is served,
+    despite freight being a sector where SOAP/EDI enterprise surfaces are common.
+domain_standards:
+- id: edi-x12
+  conforms: unknown
+  claimed: true
+  evidence: >-
+    CLAIMED IN MARKETING PROSE ONLY, NOT IN A CONTRACT. The shipper FAQ at
+    https://www.leaflogistics.com/shippers/ states Leaf will work "through email, phone, fax, EDI,
+    API — whatever you prefer". No transaction set (204/210/214/990/997) is named anywhere public and
+    no EDI implementation guide is published, so this is recorded as a claim, not a conformance.
+    Freight EDI would be the domain standard for this market; nothing in a Leaf-published contract
+    declares it.
+  reference: ANSI ASC X12 Transportation (204/214/990/210)
+- id: fmcsa-scac-mc
+  conforms: true
+  claimed: true
+  evidence: >-
+    https://www.leaflogistics.com/shippers/ states Leaf holds an MC number and a SCAC code, the
+    identifier schemes used to address a motor carrier in freight tendering. This is an
+    identifier-scheme fact stated by the company, not a machine-readable contract feature.
+compliance_program:
+  soc:
+    claimed: true
+    scope: unknown
+    report_url: null
+    evidence: >-
+      The footer of https://www.leaflogistics.com/ carries the AICPA "SOC for Service Organizations"
+      badge image (wp-content/themes/leaflog/images/aicpa-soc.png) linking to
+      https://aicpa.org/soc4so. That is a logo, not a report: Leaf names no SOC type or period,
+      publishes no trust center, and serves no compliance page (/security/, /compliance/ and
+      /trust/ all return the S3 403 used for missing keys). NO `Compliance` pointer is emitted on
+      the strength of a footer badge that links off-site to the AICPA.

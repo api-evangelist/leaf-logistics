@@ -1,0 +1,19 @@
+generated: '2026-08-25'
+method: searched
+source: npm, PyPI, RubyGems, crates.io, NuGet, Maven Central, pkg.go.dev, Packagist, GitHub
+note: >-
+  No first-party Leaf Logistics client library exists in any public package registry, and Leaf runs
+  no GitHub organization (https://api.github.com/orgs/leaflogistics returns 404; the only
+  "leaflogistics" repositories on GitHub belong to unrelated individual accounts). Leaf publishes no
+  SDK page and no source-code links. Recorded as a measured absence — no `SDKs` pointer is emitted.
+searched:
+- registry: npm
+  query: leaf-logistics / leaflogistics
+  result: no first-party package
+- registry: pypi
+  query: leaf-logistics
+  result: 404
+- registry: github
+  query: orgs/leaflogistics
+  result: 404 — no organization
+packages: []
