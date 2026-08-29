@@ -13,6 +13,17 @@ description: >-
   the GraphQL endpoint answers anonymously only with a JWT authentication error, so the schema is
   reachable only by onboarded customers.
 url: https://raw.githubusercontent.com/api-evangelist/leaf-logistics/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.leaflogistics.com/wp-content/themes/leaflog/images/webclip.png
 x-type: company
 x-source: harvest:secondary-market
